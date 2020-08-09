@@ -1,5 +1,5 @@
-let split = require("split"),
-	EventEmitter = require("events").EventEmitter;
+import split = require("split");
+import EventEmitter = require("events");
 
 function find(stream, reg) {
 	const e = new EventEmitter();
@@ -25,4 +25,4 @@ function find(stream, reg) {
 		});
 	return e;
 }
-module.exports = find;
+export { find };

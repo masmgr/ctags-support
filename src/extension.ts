@@ -1,11 +1,10 @@
-"use strict";
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
-const path = require("path");
-const LineByLine = require("n-readlines");
-const fileGrep = require("./grep");
-const fs = require("fs");
+import path = require("path");
+import LineByLine = require("n-readlines");
+import fileGrep = require("./grep");
+import fs = require("fs");
 const STATE_KEY = "ctagsSupport";
 let navigationHistory = [];
 
@@ -35,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 		() => {
 			console.log(
 				"Read .tag file from:" +
-					path.join(vscode.workspace.rootPath, ".tags")
+				path.join(vscode.workspace.rootPath, ".tags")
 			);
 			const tags = loadTags(
 				path.join(vscode.workspace.rootPath, ".tags")
@@ -80,13 +79,14 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function loadTags(tagFilePath) {
-	const tags = [];
+	const tags: Tags[] = [];
 	const liner = new LineByLine(tagFilePath);
 	let line;
 	const regExpEscaped = RegExp("[-/\\^$*+?.()|[]{}]", "g");
 	while ((line = liner.next())) {
-		const elements = line.toString("ascii").split("\t");
-		let tagName, fileName;
+		const elements: string[] = line.toString("ascii").split("\t");
+		let tagName: string;
+		let fileName: string;
 		const remainingElements = elements.filter((el, index) => {
 			if (index === 0) {
 				tagName = el;
@@ -98,15 +98,15 @@ function loadTags(tagFilePath) {
 			}
 			return true;
 		});
-		const remainingString = remainingElements.join("\t");
+		const remainingString: string = remainingElements.join("\t");
 		// Strip starting (/^) and ending ($/;") characters from ctags pattern
-		const pattern = remainingString.substring(
+		const pattern: string = remainingString.substring(
 			remainingString.lastIndexOf("/^") + 2,
 			remainingString.lastIndexOf('$/;"')
 		);
 		// Escape regex pattern and add ^ and $
 		// See: https://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript/3561711#3561711
-		const patternEscaped =
+		const patternEscaped: string =
 			"^" + pattern.replace(regExpEscaped, "\\$&") + "$";
 		tags.push({
 			description: "",
@@ -230,7 +230,7 @@ function restoreWorkspaceState(
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
 
 interface Tags {
 	description: string;
